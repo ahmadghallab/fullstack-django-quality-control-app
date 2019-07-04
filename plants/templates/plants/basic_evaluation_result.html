@@ -1,0 +1,134 @@
+{% extends 'layout.html' %}
+{% load static %}
+{% block title %}
+{{ "Report Results" }}
+{% endblock %}
+{% block breadcrumb %}
+    <li class="breadcrumb-item"><a href="{% url 'plants:get_report' %}">تقارير</a></li>
+    <li class="breadcrumb-item active" aria-current="page">تقييم أساسي</li>
+{% endblock %}
+
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        {% if results %}
+            <div class="report_header mb-4">
+                <div class="row">
+                    <div class="col-sm-4 font-weight-bold text-right"> 
+                        الادارة الصحية بالرياض 
+                        <br />
+                        قسم مراقبة الجودة</div>
+                    <div class="col-sm-4 font-weight-bold text-center">
+                        {{ results.0.place.ar_name }}
+                        <br />
+                        تقييم أساسي
+                    </div>
+                    <div class="col-sm-4 font-weight-bold text-left">
+                        {% with fdate=request.GET.fdate tdate=request.GET.tdate   %}
+                            {% if fdate == tdate %}
+                                {{ fdate }}
+                            {% else %}
+                                {{ fdate }} : {{ tdate }}
+                            {% endif %}
+                        {% endwith %}
+                    </div>
+                </div>
+            </div>
+            <div class="de-card" dir="rtl">
+                <table class="table table-hover">
+                    <thead class="">
+                        <tr>
+                            <th class="">المعيار</th>
+                            <th class="text-center">نعم</th>
+                            <th class="text-center">لا</th>
+                            <th class="text-center">المسؤل</th>
+                            <th class="text-center">ملاحظات</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for major in majors %}
+                            <thead class="">
+                                <tr>
+                                    <td colspan="5" class="font-weight-bold">
+                                        <div class="" role="group">
+                                            <a href="javascript:void(0)" id="btnGroupDrop1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                {{ major.major__ar_name }}
+                                            </a>
+                                            <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                                                <a class="dropdown-item" href="{% url 'plants:basic_evaluation_delete_major' major=major.major__id %}?{{ request.GET.urlencode }}">حذف</a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </thead>
+                            {% for result in results %}
+                                {% if result.major.pk == major.major__id %}
+                                    <tr>
+                                        <td class="">
+                                            <div role="group">
+                                                <a href="javascript:void(0)" id="btnGroupDrop2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    {{ result.criteria.description }} 
+                                                </a>
+                                                <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
+                                                    <a class="dropdown-item" href="{% url 'plants:basic_evaluation_edit' pk=result.pk %}?{{ request.GET.urlencode }}">تعديل</a>
+                                                    <a class="dropdown-item" href="{% url 'plants:basic_evaluation_delete' pk=result.pk %}?{{ request.GET.urlencode }}">حذف</a>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="text-center">{% if result.yes_or_no == 1 %}<img src="{% static 'img/yes.svg' %}" width="15">{% endif %}</td>
+                                        <td class="text-center">{% if result.yes_or_no == 0 %}<img src="{% static 'img/yes.svg' %}" width="15">{% endif %}</td>
+                                        <td class="text-center">{{ result.employee.ar_name }}</td>
+                                        <td class="text-center">{{ result.notes }}</td>
+                                        
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
+                            <tr>
+                                <th></th>
+                                <th class="text-center">{{ major.total_positive }}</th>
+                                <th class="text-center">{{ major.total_negative }}</th>
+                                <th colspan="2"></th>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% if negatives %}
+                <div>
+                    <p class="text-center font-weight-bold">
+                       ملخص السلبيات والحل المقترح والمسؤول عن تنفيذ الحل
+                    </p>
+                </div>
+                <div class="de-card">
+                    <table class="table table-hover" dir="rtl">
+                        <thead class="">
+                            <th>#</th>
+                            <th class="">المعيار</th>
+                            <th class="text-center">الحل</th>
+                            <th class="text-center">المسؤل</th>
+                        </thead>
+                        <tbody>
+                            {% for negative in negatives %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td class="font-weight-bold">{{ negative.criteria.description }}</td>
+                                    <td class="text-center">{{ negative.criteria.solution }}</td>
+                                    <td class="text-center">{{ negative.employee.ar_name }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="mb-2">
+                    <embed type="image/svg+xml" src="{% static 'charts/be_graph.svg' %}" />
+                </div>
+            {% endif %}
+            <button class="btn btn-light btn-sm float-right" id="print" onclick="doPrintReport()">عرض الطباعة</button>
+            <a href="{% url 'plants:delete_interval' %}?{{ request.GET.urlencode }}" class="btn btn-danger btn-sm float-right mx-2">حذف الفترة</a>
+        {% else %}
+        <p class="alert alert-danger text-right">لا توجد نتائج يرجي ضبط معايير البحث والمحاولة مرة اخري</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

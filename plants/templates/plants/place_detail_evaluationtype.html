@@ -1,0 +1,36 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+{{ place.ar_name }}
+{% endblock %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item"><a href="{% url 'plants:list_place' %}">أماكن الخدمة</a></li>
+    <li class="breadcrumb-item active" aria-current="page">{{ place.ar_name }}</li>
+{% endblock %}
+
+
+{% block content %}
+<div class="row"> 
+    <div class="col-md-12">   
+        <div class="de-card">
+            <table class="table table-hover">
+                <thead class="">
+                    <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">نوع التقييم</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for evaluation_type in evaluation_types %}
+                        <tr>
+                            <td scope="row">{{ forloop.counter }}</td>
+                            <td><a href="{% url 'plants:detail_place_criteria' pk=place.pk evaluationtype_pk=evaluation_type.pk %}">{{ evaluation_type.name }}</a></td>  
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

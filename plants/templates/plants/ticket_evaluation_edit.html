@@ -1,0 +1,51 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+{{ ticket_evaluation_obj.criteria.description }}
+{% endblock %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item"><a href="{% url 'plants:get_report' %}">تقارير</a></li>
+    <li class="breadcrumb-item" aria-current="page">تحليل التذكرة الطبية</li>
+    <li class="breadcrumb-item" aria-current="page">{{ ticket_evaluation_obj.place.ar_name }}</li>
+    <li class="breadcrumb-item" aria-current="page">{{ ticket_evaluation_obj.major.ar_name }}</li>
+    <li class="breadcrumb-item active" aria-current="page">{{ ticket_evaluation_obj.criteria.description }}</li>
+{% endblock %}
+
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <div class="de-card">
+            <form action="" method="post" class="mb-0">
+                {% csrf_token %}
+                <input type="hidden" name="criteria" value="{{criteria.pk}}">
+                <div class="form-group row list-form" dir="rtl">
+                    <label for="name" class="col-sm-4 ar_font text-right">{{ ticket_evaluation_obj.criteria.description }}</label>
+                    <div class="col-sm-4  text-center">
+                        <div class="custom-control custom-radio custom-control-inline">
+                            <input type="radio" id="y" name="yes_or_no" value="1" class="custom-control-input" {% if ticket_evaluation_obj.yes_or_no == 1  %}checked{% endif %}>
+                            <label class="custom-control-label ar_font" for="y">نعم</label>
+                            </div>
+                            <div class="custom-control custom-radio custom-control-inline">
+                            <input type="radio" id="n" name="yes_or_no" value="0" class="custom-control-input" {% if ticket_evaluation_obj.yes_or_no == 0  %}checked{% endif %}>
+                            <label class="custom-control-label ar_font" for="n">لا</label>
+                            </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <select name="employee" id="employee_id" class="form-control">
+                            <option value="{{ ticket_evaluation_obj.employee.pk }}">{{ ticket_evaluation_obj.employee.ar_name }}</option>
+                            {% for employee in employees %}
+                                {% if employee.pk != ticket_evaluation_obj.employee.pk %}
+                                    <option value="{{ employee.pk }}">{{ employee.ar_name }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <input type="submit" class="btn btn-primary btn-sm float-right" value="حفظ">
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

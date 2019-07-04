@@ -1,0 +1,124 @@
+{% extends 'layout.html' %}
+{% load static %}
+{% block title %}
+{{ "Report Results" }}
+{% endblock %}
+{% block breadcrumb %}
+    <li class="breadcrumb-item"><a href="{% url 'plants:get_report' %}">تقارير</a></li>
+    <li class="breadcrumb-item active" aria-current="page">تقييم الاعضاء</li>
+{% endblock %}
+
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        {% if criterias %}
+            <div class="report_header mb-4">
+                <div class="row">
+                    <div class="col-sm-4 font-weight-bold text-right"> 
+                        الادارة الصحية بالرياض 
+                        <br />
+                        قسم مراقبة الجودة</div>
+                    <div class="col-sm-4 font-weight-bold text-center">
+                        {{ results.0.place.ar_name }}
+                        <br />
+                        تقييم أداء أعضاء الفريق الطبي
+                    </div>
+                    <div class="col-sm-4 font-weight-bold text-left">
+                        {% with fdate=request.GET.fdate tdate=request.GET.tdate   %}
+                            {% if fdate == tdate %}
+                                {{ fdate }}
+                            {% else %}
+                                {{ fdate }} : {{ tdate }}
+                            {% endif %}
+                        {% endwith %}
+                    </div>
+                </div>
+            </div>
+            <div class="de-card" dir="rtl">
+                <table class="table table-hover">
+                    <thead class="">
+                        <tr>
+                            <th></th>
+                            {% for employee in employees_names %}
+                                <th class="ar_font text-center">{{ employee.employee__ar_name }}</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for major in majors %}
+                            <thead class="">
+                                <tr>
+                                    <td colspan="{{ employees_names|length|add:"1" }}" class="font-weight-bold">
+                                        <div class="" role="group">
+                                            <a href="javascript:void(0)" id="btnGroupDrop1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                {{ major.major__ar_name }}
+                                            </a>
+                                            <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                                                <a class="dropdown-item" href="{% url 'plants:member_evaluation_delete_major' major=major.major__id %}?{{ request.GET.urlencode }}">حذف</a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </thead>
+                            {% for criteria in criterias %}
+                                {% if criteria.major__id == major.major__id %}
+                                    <tr>
+                                        <td class="ar_font">{{ criteria.criteria__description }}</td>
+                                        {% for result in results %}
+                                            {% for employee in employees_names %}
+                                                {% if result.employee.pk == employee.employee__id and result.criteria.pk == criteria.criteria__pk  %}
+                                                    <td class="text-center">
+                                                        <div class="" role="group">
+                                                            <a href="javascript:void(0)" id="btnGroupDrop2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                {{ result.evaluation_score }}
+                                                            </a>
+                                                            <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
+                                                                <a class="dropdown-item" href="{% url 'plants:member_evaluation_edit' pk=result.pk %}?{{ request.GET.urlencode }}">تعديل</a>
+                                                                <a class="dropdown-item" href="{% url 'plants:member_evaluation_delete' pk=result.pk %}">حذف</a>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% endfor %}
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
+                            <!-- <tr>
+                                <th class="text-center"></th>
+                            </tr>    -->
+                        {% endfor %}
+                        <tr>
+                            <td></td>
+                            {% for employee_score in employee_scores %}
+                                <td class="font-weight-bold text-center">{{ employee_score }}
+                                    <br />
+                                    <small>
+                                        {% if employee_score >= 85 %}
+                                            صرف الحافز كاملا
+                                        {% elif employee_score < 85 and employee_score >= 70 %}
+                                            صرف الحافز بنسبة 85 %
+                                        {% elif employee_score < 70 and employee_score >= 50 %}
+                                            صرف الحافز بنسبة 50 %
+                                        {% elif employee_score < 50 %}
+                                            لا يستحق الحافز
+                                        {% endif %}
+                                    </small>
+                                </td>
+                            {% endfor %}
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="mb-2">
+                <embed type="image/svg+xml" src="{% static 'charts/me_graph.svg' %}" />
+            </div>
+            <button class="btn btn-light btn-sm float-right" id="print" onclick="doPrintReport()">عرض الطباعة</button>
+            <a href="{% url 'plants:delete_interval' %}?{{ request.GET.urlencode }}" class="btn btn-danger btn-sm float-right mx-2">حذف الفترة</a>
+        {% else %}
+        <p class="alert alert-danger text-right">لا توجد نتائج يرجي ضبط معايير البحث والمحاولة مرة اخري</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

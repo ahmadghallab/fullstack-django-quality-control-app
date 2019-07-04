@@ -1,0 +1,66 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+{{ "Employee List View" }}
+{% endblock %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item active" aria-current="page">الاعضاء</li>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="de-card">
+            <form action="" method="get" class="mb-0">
+                <div class="form-group row list-form">
+                    <div class="col-sm-11">
+                        <input type="text" name="q" value="{{ request.GET.q }}" id="member_search" class="form-control" autocomplete="off" placeholder="بحث باسم العضو او جهة العمل">
+                    </div>
+                    <input type="submit" class="btn btn-primary btn-sm col-sm-1" value="بحــث">
+                </div>
+            </form>
+            {% if employees %}
+                <table class="table table-hover" dir="rtl">
+                    <thead class="">
+                        <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">الاسم</th>
+                        <th scope="col">المكان</th>
+                        <th scope="col">التخصص</th>
+                        <th scope="col">إيجابيات</th>
+                        <th scope="col">سلبيات</th>
+                        <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for employee in employees %}
+                            <tr>
+                                <td scope="row">{{ forloop.counter }}</td>
+                                <td>{{ employee.ar_name }}</td>
+                                <td>{{ employee.place.ar_name }}</td>
+                                <td>{{ employee.major.ar_name }}</td>
+                                <td>{{ employee.positive_score }}</td>
+                                <td>{{ employee.negative_score }}</td>
+                                <td class="text-left">
+                                    <div class="btn-group" role="group">
+                                        <button id="btnGroupDrop1" type="button" class="btn btn-light btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            تحرير
+                                        </button>
+                                        <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                                            <a class="dropdown-item" href="{% url 'plants:edit_employee' pk=employee.pk %}">تعديل</a>
+                                            <a class="dropdown-item" href="{% url 'plants:delete_employee' pk=employee.pk %}">حذف</a>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p class="alert alert-danger text-right">لايوجد بيانات لعرضها</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

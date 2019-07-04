@@ -1,0 +1,41 @@
+{% extends 'layout.html' %}
+{% block title %}
+{{ member_evaluation_obj.place.ar_name }}/{{ member_evaluation_obj.major.ar_name }}/{{ member_evaluation_obj.criteria.description }}/{{ member_evaluation_obj.employee.ar_name }}
+{% endblock %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item"><a href="{% url 'plants:get_report' %}">تقارير</a></li>
+    <li class="breadcrumb-item" aria-current="page">تقييم الاعضاء</li>
+    <li class="breadcrumb-item" aria-current="page">{{ member_evaluation_obj.place.ar_name }}</li>
+    <li class="breadcrumb-item" aria-current="page">{{ member_evaluation_obj.major.ar_name }}</li>
+    <li class="breadcrumb-item" aria-current="page">{{ member_evaluation_obj.criteria.description }}</li>
+    <li class="breadcrumb-item active" aria-current="page">{{ member_evaluation_obj.employee.ar_name }}</li>
+
+{% endblock %}
+
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <div class="de-card">
+            <form action="" method="post" class="mb-0">
+                {% csrf_token %}
+                <div class="form-group row list-form" dir="rtl">
+                    <label for="name" class="col-sm-4 text-right">التقييـــم</label>
+                    <div class="col-sm-8">
+                        <select class="form-control" name="evaluation_score">
+                            <option value="{{ member_evaluation_obj.evaluation_score }}">{{ member_evaluation_obj.evaluation_score }}</option>
+                            {% for i in "x"|ljust:member_evaluation_obj.criteria.limit %}
+                                {% if forloop.counter != member_evaluation_obj.evaluation_score %}
+                                    <option value="{{ forloop.counter }}">{{ forloop.counter }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <input type="submit" class="btn btn-primary btn-sm float-right" value="حفظ">
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

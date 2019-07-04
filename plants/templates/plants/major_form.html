@@ -1,0 +1,52 @@
+{% extends 'layout.html' %}
+
+{% load widget_tweaks %}
+
+{% block title %}
+    {{ form.instance.ar_name|default:"إنشاء تخصص" }}
+{% endblock %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item"><a href="{% url 'plants:list_major' %}">التخصصات</a></li>
+    <li class="breadcrumb-item active" aria-current="page">{{ form.instance.ar_name|default:"إنشاء تخصص" }}</li>
+{% endblock %}
+
+
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <div class="de-card">
+            <form action="" method="post" class="mb-0">
+                {% csrf_token %}
+                {% if form.errors %}
+                    {% for error in form.non_field_errors %}
+                        <p class="text-danger">
+                            {{ error|escape }}
+                        </p>
+                    {% endfor %}
+                {% endif %}
+                {% for field in form %}
+                    <div class="form-group row list-form">
+                        <label for="name" class="col-sm-4">{{ field.label }}</label>
+                        <div class="col-sm-8">
+                            {% if field.errors %}
+                                {{ field|add_class:"form-control is-invalid" }}
+                                {% for error in field.errors %}
+                                    <div class="invalid-feedback">
+                                    {{ error }}
+                                    </div>
+                                {% endfor %}
+                            {% else %}
+                                {{ field|add_class:"form-control" }}
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+                <input type="submit" class="btn btn-primary btn-sm float-right" value="حفظ">
+                <a href="{% url 'plants:list_major' %}" class="btn btn-light btn-sm float-right mx-2">تراجع</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

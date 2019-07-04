@@ -1,0 +1,57 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+{{ place.ar_name }}/{{ major.ar_name }}
+{% endblock %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item"><a href="{% url 'plants:list_place' %}">أماكن الخدمة</a></li>
+    <li class="breadcrumb-item active" aria-current="page"><a href="{% url 'plants:detail_place_evaluationtype' pk=place.pk %}">{{ place.ar_name }}</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'plants:detail_place_criteria' pk=place.pk evaluationtype_pk=evaluation_type.pk %}">{{ evaluation_type.name }}</a></li>
+    <li class="breadcrumb-item active" aria-current="page">{{ major.ar_name }}</li>
+{% endblock %}
+
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="de-card">
+            <form action="" method="post" class="mb-0">
+                {% csrf_token %}
+                {% for criteria in criterias %}
+                    <input type="hidden" name="criteria" value="{{criteria.pk}}">
+                    <div class="form-group row list-form" dir="rtl">
+                        <label for="name" class="col-sm-4 text-right">{{ criteria.description }}</label>
+                        <div class="col-sm-4 text-center">
+                            <div class="custom-control custom-radio custom-control-inline">
+                                <input type="radio" id="y{{ forloop.counter }}" name="yes_or_no_{{criteria.pk}}" value="1" class="custom-control-input" required>
+                                <label class="custom-control-label" for="y{{ forloop.counter }}">نعم</label>
+                            </div>
+                            <div class="custom-control custom-radio custom-control-inline">
+                                <input type="radio" id="n{{ forloop.counter }}" name="yes_or_no_{{criteria.pk}}" value="0" class="custom-control-input" required>
+                                <label class="custom-control-label" for="n{{ forloop.counter }}">لا</label>
+                            </div>
+                            <div class="custom-control custom-radio custom-control-inline">
+                                <input type="radio" id="other{{ forloop.counter }}" name="yes_or_no_{{criteria.pk}}" value="-1" class="custom-control-input" required>
+                                <label class="custom-control-label" for="other{{ forloop.counter }}">اخري</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <select name="employee_{{criteria.pk}}" id="employee_id" class="form-control" required>
+                                <option value="">المسؤول</option>
+                                {% for employee in employees %}
+                                    <option value="{{ employee.pk }}">{{ employee.ar_name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-sm-2">
+                           <input type="text" name="notes_{{criteria.pk}}" class="form-control">
+                        </div>
+                    </div>
+                {% endfor %}
+                <input type="submit" class="btn btn-primary btn-sm float-right" value="حفظ">
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

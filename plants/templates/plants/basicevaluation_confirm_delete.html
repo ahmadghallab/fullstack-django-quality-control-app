@@ -1,0 +1,26 @@
+{% extends 'layout.html' %}
+{% block title %}Delete Survey{% endblock %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item"><a href="{% url 'plants:get_report' %}">تقارير</a></li>
+    <li class="breadcrumb-item active" aria-current="page">تقييم أساسي</li>
+    <li class="breadcrumb-item active" aria-current="page">{{ basicevaluation.place.ar_name }}</li>
+    <li class="breadcrumb-item active" aria-current="page">{{ basicevaluation.major.ar_name }}</li>
+    <li class="breadcrumb-item active" aria-current="page">{{ basicevaluation.criteria.description }}</li>
+    <li class="breadcrumb-item active" aria-current="page">{{ basicevaluation.date }}</li>
+{% endblock %} 
+
+{% block content %} 
+<div class="row">
+    <div class="col-md-12">   
+        <div class="de-card">
+            <h6 class="mb-3 text-right font-weight-bold">تأكيد حذف بيان ؟</h6>
+            <form action="{% url 'plants:basic_evaluation_delete' pk=basicevaluation.pk %}" method="post" class="mb-0">
+                {% csrf_token %}
+                <input type="submit" class="btn btn-danger btn-sm float-right" value="حذف">
+                <a href="{% url 'plants:get_report' %}" class="btn btn-light btn-sm float-right mx-2">تراجع</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

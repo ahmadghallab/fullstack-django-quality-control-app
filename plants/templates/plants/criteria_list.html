@@ -1,0 +1,52 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+{{ "Criteria List View" }}
+{% endblock %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item active" aria-current="page">المعايير</li>
+{% endblock %}
+
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="de-card">
+            <table class="table table-hover" dir="rtl">
+                <thead class="">
+                    <tr>
+                    <th scope="col">المعيار</th>
+                    <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for major in majors %}
+                        <tr>
+                            <th colspan="2">{{ major.major__ar_name }}</th>
+                        </tr>
+                        {% for criteria in criterias %}
+                            {% if criteria.major.pk == major.major__id %}
+                                <tr>
+                                    <td>{{ criteria.description }}</td>
+                                    <td class="text-left">
+                                        <div class="btn-group" role="group">
+                                            <button id="btnGroupDrop1" type="button" class="btn btn-light btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                تحرير
+                                            </button>
+                                            <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                                                <a class="dropdown-item" href="{% url 'plants:edit_criteria' pk=criteria.pk %}">تعديل</a>
+                                                <a class="dropdown-item" href="{% url 'plants:delete_criteria' pk=criteria.pk %}">حذف</a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,114 @@
+ {% load static %}
+ <html lang="en">
+ <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/styling.css' %}">
+    <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}" type="image/x-icon">
+ </head>
+ <body>
+    <!-- Nav bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container bs-nav">
+            <a class="navbar-brand mr-0 font-weight-bold" href="/">تطبيق مراقبة الجودة</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            الاماكن
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="{% url 'plants:create_place' %}">إنشاء</a>
+                            <a class="dropdown-item" href="{% url 'plants:list_place' %}">عرض</a>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            التخصصات
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="{% url 'plants:create_major' %}">إنشاء</a>
+                            <a class="dropdown-item" href="{% url 'plants:list_major' %}">عرض</a>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            الاعضاء
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="{% url 'plants:create_employee' %}">إنشاء</a>
+                            <a class="dropdown-item" href="{% url 'plants:list_employee' %}">عرض</a>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            المعايير
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="{% url 'plants:create_criteria' %}">إنشاء</a>
+                            <a class="dropdown-item" href="{% url 'plants:list_criteria' %}">عرض</a>
+                        </div>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            المزيد
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="{% url 'plants:create_evaluationtype' %}">إنشاء نوع تقييم</a>
+                            <a class="dropdown-item" href="{% url 'plants:list_evaluationtype' %}">عرض انواع التقيمات</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="{% url 'plants:get_report' %}">تقارير</a>
+                        </div>
+                    </li>
+
+                    <!-- <li class="nav-item">
+                        <a class="nav-link" href="">Reports</a>
+                    </li> -->
+                </ul>
+                <!-- <a class="custom-nav-link" href="{% url 'plants:get_report' %}">Reports</a> -->
+            </div>
+        </div>
+    </nav>
+    <!-- Breadcrumb -->
+    <div class="pages_map">
+        <div class="container pages_map_inside">
+            <nav aria-label="breadcrumb" dir="rtl">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><a href="/">الرئيسية</a></li>
+                    {% block breadcrumb %}{% endblock %}
+                </ol>
+            </nav>
+        </div>
+    </div>
+    <!-- Main Container -->
+    <div class="whole">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-success text-right" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+        {% block content %}{% endblock %}
+    </div>
+    <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+    <script src="{% static 'js/popper.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    
+    {% block javascript %}
+    <script>
+        function doPrintReport() {
+            window.print();
+        }
+    </script>
+    {% endblock %}
+ </body>
+ </html>

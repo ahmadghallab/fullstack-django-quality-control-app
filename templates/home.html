@@ -1,0 +1,29 @@
+{% extends 'layout.html' %}
+{% block title %}QA App{% endblock %}
+{% load static %}
+
+{% block content %}
+<div class="jumbotron">
+    <div class="row">
+      <div class="col-md-4 text-center">
+        <img src="{% static 'img/qc.svg' %}" id="home-icon" alt="Books">
+      </div>
+      <div class="col-md-8 text-right">
+      <!-- <h3 class=""><strong>ضبط الجودة</strong></h1> -->
+      <p class="lead">
+        <span class="font-weight-bold">
+        ضبط الجودة أو مراقبة الجودة أو الرقابة على الجودة 
+        </span>
+        هي جانب من جوانب عملية ضمان الجودة التي تتكون من الأنشطة المستخدمة في
+        <span class="font-weight-bold">
+         كشف وقياس
+        </span>
+          التباين في الخصائص لمنتوجات أو مخرجات نظام إنتاج ما أو عملية ما ويشمل ذلك
+          <span class="font-weight-bold">
+           الأعمال التصحيحية
+          </span>
+          </p>
+      </div>
+    </div>
+</div>
+{% endblock %}

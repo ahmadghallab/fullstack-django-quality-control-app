@@ -1,0 +1,56 @@
+{% extends 'layout.html' %}
+{% block title %}
+{{ place.ar_name }}/{{ major.ar_name }}
+{% endblock %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item"><a href="{% url 'plants:list_place' %}">أماكن الخدمة</a></li>
+    <li class="breadcrumb-item active" aria-current="page"><a href="{% url 'plants:detail_place_evaluationtype' pk=place.pk %}">{{ place.ar_name }}</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'plants:detail_place_criteria' pk=place.pk evaluationtype_pk=evaluation_type.pk %}">{{ evaluation_type.name }}</a></li> 
+    <li class="breadcrumb-item active" aria-current="page">{{ major.ar_name }}</li>
+    
+{% endblock %}
+
+
+{% block content %} 
+<div class="row">
+    <div class="col-md-12">   
+        <div class="de-card">
+            <form action="" method="post" class="mb-0">
+                {% csrf_token %}
+                <table class="table" dir="rtl">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            {% for criteria in criterias %}
+                                <input type="hidden" name="criteria" value="{{criteria.pk}}">
+                                <th>{{ criteria.description }}</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for employee in employees %}
+                        <input type="hidden" name="employee" value="{{ employee.pk }}">
+                            <tr>
+                                <td class="font-weight-bold">{{ employee.ar_name }}</td>
+                                {% for criteria in criterias %}
+                                    <td>
+                                        <select class="form-control" name="{{ criteria.pk }}{{ employee.pk }}">
+                                            <option value="">التقييـــم</option>
+                                            <option value="0">0</option>
+                                            {% for i in "x"|ljust:criteria.limit %}
+                                                <option value="{{ forloop.counter }}">{{ forloop.counter }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </td>
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <input type="submit" class="btn btn-primary btn-sm float-right" value="حفظ">
+            </form>
+        </div>
+    </div> 
+</div>
+{% endblock %}

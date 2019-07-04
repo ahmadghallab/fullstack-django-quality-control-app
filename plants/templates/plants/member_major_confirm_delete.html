@@ -1,0 +1,23 @@
+{% extends 'layout.html' %}
+{% block title %}حذف تقييم أعضاء{% endblock %}
+
+{% block breadcrumb %}
+
+    <li class="breadcrumb-item"><a href="{% url 'plants:get_report' %}">تقارير</a></li>
+    <li class="breadcrumb-item active" aria-current="page"> حذف تقييم أعضاء </li>
+{% endblock %} 
+
+{% block content %} 
+<div class="row">
+    <div class="col-md-12">   
+        <div class="de-card">
+            <h6 class="mb-3 text-right font-weight-bold">تأكيد حذف تقييم أعضاء</h6>
+            <form action="{% url 'plants:member_evaluation_delete_major' major=major %}?{{ request.GET.urlencode }}" method="post" class="mb-0">
+                {% csrf_token %}
+                <input type="submit" class="btn btn-danger btn-sm float-right" value="حذف">
+                <a href="{% url 'plants:get_report' %}" class="btn btn-light btn-sm float-right mx-2">تراجع</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

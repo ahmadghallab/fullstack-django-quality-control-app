@@ -1,0 +1,47 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+{{ "Place List View" }}
+{% endblock %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item active" aria-current="page">أماكن الخدمة</li>
+{% endblock %}
+
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">   
+        <div class="de-card">
+            <table class="table table-hover" dir="rtl">
+                <thead class="">
+                    <tr>
+                    <th scope="col">#</th>
+                    <th scope="col" class="ar_font">اسم</th>
+                    <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for place in places %}
+                        <tr>
+                            <td scope="row">{{ forloop.counter }}</td>
+                            <td><a href="{% url 'plants:detail_place_evaluationtype' pk=place.pk %}">{{ place.ar_name }}</a></td>                            
+                            <td class="text-left">
+                                <div class="btn-group" role="group">
+                                    <button id="btnGroupDrop1" type="button" class="btn btn-light btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        تحرير
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                                        <a class="dropdown-item" href="{% url 'plants:edit_place' pk=place.pk %}">تعديل</a>
+                                        <a class="dropdown-item" href="{% url 'plants:delete_place' pk=place.pk %}">حذف</a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

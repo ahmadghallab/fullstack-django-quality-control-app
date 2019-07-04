@@ -1,0 +1,22 @@
+{% extends 'layout.html' %}
+{% block title %}حذف {{ major.ar_name }}{% endblock %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item"><a href="{% url 'plants:list_major' %}">التخصصات</a></li>
+    <li class="breadcrumb-item active" aria-current="page">{{ major.ar_name }}</li>
+{% endblock %} 
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">   
+        <div class="de-card">
+            <h6 class="mb-3 text-right">تأكيد حذف <b>{{ major.ar_name }}</b> ؟</h6>
+            <form action="{% url 'plants:delete_major' pk=major.pk %}" method="post" class="mb-0">
+                {% csrf_token %}
+                <input type="submit" class="btn btn-danger btn-sm float-right" value="حذف">
+                <a href="{% url 'plants:list_major' %}" class="btn btn-light btn-sm float-right mx-2">تراجع</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

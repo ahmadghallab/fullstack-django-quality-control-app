@@ -1,0 +1,53 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+{{ survey_evaluation_obj.criteria.description }}
+{% endblock %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item"><a href="{% url 'plants:get_report' %}">تقارير</a></li>
+    <li class="breadcrumb-item" aria-current="page">نتيجة استطلاع آراء المنتفعين</li>
+    <li class="breadcrumb-item" aria-current="page">{{ survey_evaluation_obj.place.ar_name }}</li>
+    <li class="breadcrumb-item" aria-current="page">{{ survey_evaluation_obj.major.ar_name }}</li>
+    <li class="breadcrumb-item active" aria-current="page">{{ survey_evaluation_obj.voter_name }}</li>
+{% endblock %}
+
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="de-card">
+            <form action="" method="post" class="mb-0">
+                {% csrf_token %}
+                <div class="form-group row list-form" dir="rtl">
+                    <label for="name" class="col-sm-4 ar_font text-right">{{ survey_evaluation_obj.criteria.description }}</label>
+                    <div class="col-sm-3  text-center">
+                        <select class="form-control" name="evaluation_score">
+                            <option value="{{ survey_evaluation_obj.evaluation_score }}">{{ survey_evaluation_obj.evaluation_score }}</option>
+                            {% for i in "x"|ljust:survey_evaluation_obj.criteria.limit %}
+                                {% if forloop.counter != survey_evaluation_obj.evaluation_score %}
+                                    <option value="{{ forloop.counter }}">{{ forloop.counter }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-sm-3">
+                        <select name="employee" id="employee_id" class="form-control">
+                            <option value="{{ survey_evaluation_obj.employee.pk }}">{{ survey_evaluation_obj.employee.ar_name }}</option>
+                            {% for employee in employees %}
+                                {% if employee.pk != survey_evaluation_obj.employee.pk %}
+                                    <option value="{{ employee.pk }}">{{ employee.ar_name }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-sm-2">
+                        <input type="text" class="form-control" name="notes" value="{{ survey_evaluation_obj.notes }}">
+                    </div>
+                </div>
+                <input type="submit" class="btn btn-primary btn-sm float-right" value="حفظ">
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

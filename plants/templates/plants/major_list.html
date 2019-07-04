@@ -1,0 +1,52 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+{{ "major List View" }}
+{% endblock %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item active" aria-current="page">التخصصات</li>
+{% endblock %}
+
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="de-card">
+            <table class="table table-hover" dir="rtl">
+                <thead>
+                    <tr>
+                    <th scope="col" class="ar_font">التخصص</th>
+                    <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for evaluation_type in evaluation_types %}
+                        <tr>
+                            <th colspan="2">{{ evaluation_type.evaluation_type__name }}</th>
+                        </tr>
+                        {% for major in majors %}
+                            {% if major.evaluation_type.pk == evaluation_type.evaluation_type__id %}
+                                <tr>
+                                    <td>{{ major.ar_name }}</td>
+                                    <td class="text-left">
+                                        <div class="btn-group" role="group">
+                                            <button id="btnGroupDrop1" type="button" class="btn btn-light btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                تحرير
+                                            </button>
+                                            <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                                                <a class="dropdown-item" href="{% url 'plants:edit_major' pk=major.pk %}">تعديل</a>
+                                                <a class="dropdown-item" href="{% url 'plants:delete_major' pk=major.pk %}">حذف</a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

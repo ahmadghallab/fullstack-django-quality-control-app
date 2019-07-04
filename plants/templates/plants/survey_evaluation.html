@@ -1,0 +1,61 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+{{ place.ar_name }}/{{ major.ar_name }}
+{% endblock %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item"><a href="{% url 'plants:list_place' %}">أماكن الخدمة</a></li>
+    <li class="breadcrumb-item" aria-current="page"><a href="{% url 'plants:detail_place_evaluationtype' pk=place.pk %}">{{ place.ar_name }}</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'plants:detail_place_criteria' pk=place.pk evaluationtype_pk=evaluation_type.pk %}">{{ evaluation_type.name }}</a></li>
+    <li class="breadcrumb-item active" aria-current="page">{{ major.ar_name }}</li>
+{% endblock %}
+
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="de-card">
+            <form action="" method="post" class="mb-0">
+                {% csrf_token %}
+                <div class="form-group row list-form text-right" dir="rtl">
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" name="voter_name" id="voter_name" autocomplete="off" placeholder="الاسم" required>
+                    </div>
+                    <div class="col-sm-4">
+                        <input type="number" class="form-control" name="voter_age" id="voter_age" autocomplete="off" placeholder="السن" required>
+                    </div>
+                </div>
+                {% for criteria in criterias %}
+                    <input type="hidden" name="criteria" value="{{criteria.pk}}">
+                    <div class="form-group row list-form" dir="rtl">
+                        <label for="name" class="col-sm-4 ar_font text-right">{{ criteria.description }}</label>
+                        <div class="col-sm-4 text-center">
+                            <select class="form-control" name="vote_{{ criteria.pk }}">
+                                <option value="">التقييـــم</option>
+                                <option value="0">0</option>
+                                {% for i in "x"|ljust:criteria.limit %}
+                                    <option value="{{ forloop.counter }}">{{ forloop.counter }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-sm-2">
+                            <select name="employee_{{criteria.pk}}" id="employee_id" class="form-control" required>
+                                <option value="">المسؤول</option>
+                                {% for employee in employees %}
+                                    <option value="{{ employee.pk }}">{{ employee.ar_name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-sm-2">
+                           <input type="text" name="notes_{{criteria.pk}}" class="form-control">
+                        </div>
+                    </div>
+                {% endfor %}
+                <input type="submit" class="btn btn-primary btn-sm float-right" value="حفظ">
+                <a href="{% url 'plants:survey_evaluation_print' place_pk=place.pk major_pk=major.pk evaluationtype_pk=evaluation_type.pk %}" class="btn btn-sm btn-light float-right mx-2">عرض الطباعة</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
